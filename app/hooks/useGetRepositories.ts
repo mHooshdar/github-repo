@@ -9,13 +9,13 @@ interface GetRepositoriesInput {
   page?: number;
 }
 
-async function getRepositories(query: GetRepositoriesInput) {
+export async function getRepositories(query: GetRepositoriesInput) {
   return axios.get<RepositoryDTO>('/repositories', { params: query });
 }
 
 export const useGetRepositories = (query: GetRepositoriesInput) => {
   return useQuery({
-    queryKey: ['repositories'],
+    queryKey: ['repositories', query.q],
     queryFn: () => getRepositories(query),
   });
 };
