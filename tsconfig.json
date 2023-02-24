@@ -22,7 +22,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@utils/*": ["./app/utils/*"]
+      "@utils/*": ["./app/utils/*"],
+      "@hooks/*": ["./app/hooks/*"],
+      "@icons/*": ["./app/icons/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

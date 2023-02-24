@@ -21,6 +21,8 @@ const customJestConfig = {
   moduleNameMapper: {
     '@/(.*)$': '<rootDir>/$1',
     '@utils/(.*)$': '<rootDir>/app/utils/$1',
+    '@hooks/(.*)$': '<rootDir>/app/hooks/$1',
+    '@icons/(.*)$': '<rootDir>/app/icons/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
 };
