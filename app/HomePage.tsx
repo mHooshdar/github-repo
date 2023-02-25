@@ -12,6 +12,7 @@ import {
 import { Ubuntu } from 'next/font/google';
 import cn from 'classnames';
 import debounce from 'lodash/debounce';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 // * components
 import Header from './components/Header';
@@ -19,31 +20,39 @@ import Skeleton from './components/Skeleton';
 import RepositoryList from './components/RepositoryList';
 import { useGetRepositories } from './hooks/useGetRepositories';
 
-interface Props {
-  searchParams: {
-    q: string;
-  };
-}
-
 const font = Ubuntu({ subsets: ['latin'], weight: ['400', '700'] });
 
-function HomePage({ searchParams }: Props) {
-  const [query, setQuery] = useState(searchParams.q);
+function HomePage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathName = usePathname();
+  const [query, setQuery] = useState(searchParams.get('q') || '');
   const deferredQuery = useDeferredValue(query);
   const inputId = useId();
-  const { data, isLoading } = useGetRepositories({ q: query });
+  const { data, isLoading } = useGetRepositories({
+    q: query,
+    page: searchParams.get('page') || 1,
+    per_page: 10,
+  });
 
-  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const debouncedChangeHandler = useCallback(debounce(changeHandler, 300), []);
+  const debouncedChangeHandler = useCallback(
+    debounce((event: ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+      // should reset to page 1
+      router.push(
+        `${pathName}?${new URLSearchParams({
+          q: event.target.value,
+        }).toString()}`
+      );
+    }, 300),
+    [pathName]
+  );
 
   useEffect(() => {
     return () => {
       debouncedChangeHandler.cancel();
     };
-  }, []);
+  }, [debouncedChangeHandler]);
 
   return (
     <div className={cn(font.className, 'p-4')}>
@@ -66,7 +75,11 @@ function HomePage({ searchParams }: Props) {
       </label>
       <Suspense fallback={<Skeleton width="200px" height="200px" />}>
         {deferredQuery ? (
-          <RepositoryList isLoading={isLoading} data={data?.data} />
+          <RepositoryList
+            isLoading={isLoading}
+            data={data?.data}
+            totalCount={data?.data.total_count ?? 0}
+          />
         ) : (
           <p className="dark:text-red-400 text-red-500 text-sm italic">
             Please type a repository.

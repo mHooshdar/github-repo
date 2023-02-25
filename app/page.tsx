@@ -1,11 +1,5 @@
 import HomePage from './HomePage';
 
-interface Props {
-  searchParams: {
-    q: string;
-  };
-}
-
-const Home = async (props: Props) => <HomePage {...props} />;
+const Home = async () => <HomePage />;
 
 export default Home;

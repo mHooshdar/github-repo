@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import PaginationItem from './PaginationItem';
 
 interface PaginationProps {
@@ -9,7 +9,7 @@ interface PaginationProps {
   size?: number;
 }
 
-export default function Pagination({ pagesCount, size = 3 }: PaginationProps) {
+function Pagination({ pagesCount, size = 3 }: PaginationProps) {
   const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(
     +(searchParams.get('page') || 1)
@@ -19,9 +19,16 @@ export default function Pagination({ pagesCount, size = 3 }: PaginationProps) {
     return pageNum >= 1 && pageNum <= pagesCount ? pageNum : null;
   });
 
+  const prevRoute = useMemo(() => {
+    return Array.from(searchParams.entries()).reduce(
+      (prev, [key, val]) => ({ ...prev, [key]: val }),
+      {}
+    );
+  }, [searchParams]);
+
   function resolveRoute(page: number) {
     return {
-      query: { page },
+      query: { ...prevRoute, page },
     };
   }
 
@@ -89,3 +96,5 @@ export default function Pagination({ pagesCount, size = 3 }: PaginationProps) {
     </div>
   );
 }
+
+export default memo(Pagination);

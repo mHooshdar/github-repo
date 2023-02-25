@@ -5,8 +5,8 @@ import type { RepositoryDTO } from '../types';
 interface GetRepositoriesInput {
   q: string;
   order?: 'asc' | 'desc';
-  per_page?: number;
-  page?: number;
+  per_page?: number | string;
+  page?: number | string;
 }
 
 export async function getRepositories(query: GetRepositoriesInput) {
@@ -15,7 +15,8 @@ export async function getRepositories(query: GetRepositoriesInput) {
 
 export const useGetRepositories = (query: GetRepositoriesInput) => {
   return useQuery({
-    queryKey: ['repositories', query.q],
+    queryKey: ['repositories', query.q, query.page],
     queryFn: () => getRepositories(query),
+    enabled: !!query.q,
   });
 };

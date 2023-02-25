@@ -1,25 +1,38 @@
 import { memo } from 'react';
 // * components
-import Skeleton from './Skeleton';
 import Repository from './Repository';
+import Pagination from './Pagination';
 import { RepositoryDTO } from '../types';
+import RepositoryItemSkeleton from './RepositoryItemSkeleton';
 
 interface Props {
   isLoading: boolean;
   data?: RepositoryDTO;
+  totalCount: number;
 }
 
-function RepositoryList({ data, isLoading }: Props) {
+function RepositoryList({ data, isLoading, totalCount }: Props) {
   if (isLoading) {
-    return <Skeleton width="300px" height="300px" />;
+    return (
+      <>
+        {Array(10)
+          .fill(0)
+          .map((_, index) => (
+            <RepositoryItemSkeleton key={index} className="mb-2" />
+          ))}
+      </>
+    );
   }
 
   return (
     <div>
       {data?.items.length ? (
-        data?.items.map(repo => (
-          <Repository key={repo.id} repo={repo} className="mb-4" />
-        ))
+        <>
+          {data?.items.map(repo => (
+            <Repository key={repo.id} repo={repo} className="mb-4" />
+          ))}
+          <Pagination pagesCount={totalCount} />
+        </>
       ) : (
         <span className="dark:text-gray-300">Not found</span>
       )}
