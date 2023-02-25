@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="dark:bg-slate-800">
+      <body className="dark:bg-slate-900 bg-gray-50 transition">
         <ReactQueryWrapper>
           <main className="container mx-auto">{children}</main>
         </ReactQueryWrapper>

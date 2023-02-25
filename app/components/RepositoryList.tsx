@@ -1,17 +1,29 @@
-import { useGetRepositories } from '@hooks/useGetRepositories';
 import { memo } from 'react';
 // * components
 import Skeleton from './Skeleton';
+import Repository from './Repository';
+import { RepositoryDTO } from '../types';
 
 interface Props {
-  query: string;
+  isLoading: boolean;
+  data?: RepositoryDTO;
 }
 
-function RepositoryList({ query }: Props) {
-  const { isLoading } = useGetRepositories({ q: query });
+function RepositoryList({ data, isLoading }: Props) {
+  if (isLoading) {
+    return <Skeleton width="300px" height="300px" />;
+  }
 
   return (
-    <div>{isLoading ? <Skeleton width="300px" height="300px" /> : 'dataa'}</div>
+    <div>
+      {data?.items.length ? (
+        data?.items.map(repo => (
+          <Repository key={repo.id} repo={repo} className="mb-4" />
+        ))
+      ) : (
+        <span className="dark:text-gray-300">Not found</span>
+      )}
+    </div>
   );
 }
 

@@ -7,11 +7,11 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.response.use(
-  // exposing only the data of request
-  // you can expose the status or anything else or show some tooltip in the error status
-  response => response.data,
-  error => Promise.reject(error.message)
-);
+// instance.interceptors.response.use(
+//   // exposing only the data of request
+//   // you can expose the status or anything else or show some tooltip in the error status
+//   response => response.data,
+//   error => Promise.reject(error.message)
+// );
 
 export default instance;
