@@ -63,7 +63,7 @@ Used `jest` and `testing-library` for this project, because I think that `vitest
 
 ## Deploy on Vercel
 
-This project is deployed on `vercel url` with vercel deployment
+This project is deployed on `https://github-repo-three.vercel.app/` with vercel deployment
 
 If you have any further questions or feedback, don't hesitate to contact me
 

@@ -40,9 +40,9 @@ function HomePage() {
       setQuery(event.target.value);
       // should reset to page 1
       router.push(
-        `${pathName}?${new URLSearchParams({
-          q: event.target.value,
-        }).toString()}`
+        `${pathName}?${new URLSearchParams(
+          event.target.value ? { q: event.target.value } : {}
+        ).toString()}`
       );
     }, 300),
     [pathName]
